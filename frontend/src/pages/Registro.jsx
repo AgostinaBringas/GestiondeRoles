@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Register() {
+function registro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = () => {
+  const handleregistro = () => {
     if (!email || !password) {
       alert('Por favor, completá todos los campos');
       return;
     }
 
-    fetch('http://localhost:3001/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
+fetch('http://localhost:3001/api/usuarios/registro', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password })
+})
+
       .then(res => res.json())
       .then(data => {
         if (data.error) {
@@ -50,7 +51,7 @@ function Register() {
         style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem' }}
       />
       <button
-        onClick={handleRegister}
+        onClick={handleregistro}
         disabled={!email || !password}
         style={{
           padding: '0.5rem 1rem',
@@ -66,4 +67,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default registro;

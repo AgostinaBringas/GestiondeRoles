@@ -1,13 +1,19 @@
-const Usuario = require('../models/Usuario');
+// controllers/usuariosController.js
 
-exports.listarUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find();
-  res.json(usuarios);
+const registrarUsuario = (req, res) => {
+  res.json({ mensaje: 'Usuario registrado correctamente' });
 };
 
-exports.cambiarRolUsuario = async (req, res) => {
-  const { id } = req.params;
-  const { rol } = req.body;
-  await Usuario.findByIdAndUpdate(id, { rol });
-  res.json({ message: 'Rol actualizado' });
+const listarUsuarios = (req, res) => {
+  res.json({ usuarios: [] });
+};
+
+const cambiarRolUsuario = (req, res) => {
+  res.json({ mensaje: 'Rol cambiado correctamente' });
+};
+
+module.exports = {
+  registrarUsuario,
+  listarUsuarios,
+  cambiarRolUsuario
 };

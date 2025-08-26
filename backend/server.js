@@ -1,31 +1,20 @@
+require('dotenv').config();
 const express = require('express');
-const router = express.Router();
-const Usuario = require('../models/Usuario'); // tu modelo de usuario
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-// Ruta para registrar un nuevo usuario
-router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+const usuariosRoutes = require('./routes/usuarios');
 
-  try {
-    // Validación básica
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Faltan datos' });
-    }
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    // Verificar si el usuario ya existe
-    const usuarioExistente = await Usuario.findOne({ email });
-    if (usuarioExistente) {
-      return res.status(409).json({ error: 'El usuario ya existe' });
-    }
+app.use('/api/usuarios', usuariosRoutes);
 
-    // Crear nuevo usuario
-    const nuevoUsuario = new Usuario({ email, password }); // idealmente deberías hashear la contraseña
-    await nuevoUsuario.save();
-
-    res.status(201).json({ success: true, usuario: nuevoUsuario });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al registrar usuario' });
-  }
-});
-
-module.exports = router;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
+    });
+  })
+  .catch(err => console.error(err));
